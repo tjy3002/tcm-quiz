@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>九种体质自测 — 体质不对，进补白费</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f8f4ee;
+    color: #3a2a1a;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* === 首页 === */
+  #page-home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #6b3a2a 0%, #9b5a3a 40%, #c8854a 100%);
+    color: #fff;
+    padding: 48px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    letter-spacing: 1px;
+  }
+  .hero h2 {
+    font-size: clamp(14px, 3.5vw, 18px);
+    font-weight: 500;
+    opacity: 0.9;
+    margin-bottom: 24px;
+  }
+  .hero-desc {
+    background: rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin: 0 auto 32px;
+    max-width: 480px;
+    font-size: 14px;
+    text-align: left;
+    line-height: 1.9;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .hero-desc p { margin-bottom: 6px; }
+  .hero-desc p:last-child { margin-bottom: 0; }
+  .hero-desc strong { color: #ffd580; }
+
+  .gender-section {
+    padding: 32px 20px;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+  }
+  .gender-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #6b3a2a;
+    margin-bottom: 20px;
+  }
+  .gender-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .gender-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 16px;
+    text-align: center;
+    border: 2.5px solid #e8ddd0;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 2px 8px rgba(107,58,42,0.06);
+  }
+  .gender-card:hover, .gender-card.selected {
+    border-color: #9b5a3a;
+    background: #fff8f3;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(107,58,42,0.15);
+  }
+  .gender-card .icon { font-size: 48px; margin-bottom: 10px; }
+  .gender-card .label { font-size: 18px; font-weight: 700; color: #3a2a1a; margin-bottom: 4px; }
+  .gender-card .sub { font-size: 12px; color: #8a7060; }
+
+  .notice-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    border-left: 4px solid #c8854a;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(107,58,42,0.06);
+  }
+  .notice-box h3 { font-size: 14px; font-weight: 700; color: #6b3a2a; margin-bottom: 10px; }
+  .notice-box ul { list-style: none; }
+  .notice-box li {
+    font-size: 13px;
+    color: #5a4a3a;
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .notice-box li::before { content: '✦'; position: absolute; left: 0; color: #c8854a; font-size: 10px; top: 5px; }
+  .score-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .score-item {
+    background: #fdf8f3;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #5a4a3a;
+  }
+  .score-item strong { color: #9b5a3a; }
+
+  .btn-start {
+    width: 100%;
+    background: linear-gradient(135deg, #6b3a2a, #9b5a3a);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(107,58,42,0.35);
+    transition: all 0.25s;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(107,58,42,0.45); }
+  .btn-start:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+  /* === 测试页 === */
+  #page-quiz { display: none; }
+  .quiz-header {
+    background: linear-gradient(135deg, #6b3a2a, #9b5a3a);
+    color: #fff;
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(107,58,42,0.2);
+  }
+  .quiz-header-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .quiz-header-title { font-size: 15px; font-weight: 700; }
+  .quiz-counter { font-size: 13px; opacity: 0.85; }
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    height: 5px;
+    margin-top: 10px;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: #ffd580;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .quiz-body {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 24px 16px 100px;
+  }
+
+  .question-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(107,58,42,0.08);
+    border: 1px solid #ede3d8;
+    animation: fadeInUp 0.3s ease;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .question-num {
+    display: inline-block;
+    background: linear-gradient(135deg, #6b3a2a, #9b5a3a);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .question-tag {
+    display: inline-block;
+    background: #fdf0e6;
+    color: #9b5a3a;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    margin-left: 6px;
+  }
+  .question-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2a1a0a;
+    line-height: 1.65;
+  }
+  .options-group { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .option-btn {
+    background: #fafaf8;
+    border: 2px solid #e8ddd0;
+    border-radius: 12px;
+    padding: 12px 10px;
+    font-size: 13px;
+    color: #3a2a1a;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .option-btn:hover { border-color: #c8854a; background: #fdf8f3; }
+  .option-btn.selected {
+    border-color: #9b5a3a;
+    background: linear-gradient(135deg, #fdf0e6, #fff5ee);
+    color: #6b3a2a;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(155,90,58,0.2);
+  }
+  .option-letter {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: #e8ddd0;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 22px;
+    margin-right: 6px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .option-btn.selected .option-letter { background: #9b5a3a; color: #fff; }
+
+  .quiz-section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #9b5a3a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 16px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quiz-section-label::after { content: ''; flex: 1; height: 1px; background: #e8ddd0; }
+
+  .quiz-footer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid #e8ddd0;
+    padding: 12px 16px;
+    z-index: 100;
+    box-shadow: 0 -4px 16px rgba(107,58,42,0.08);
+  }
+  .quiz-footer-inner { max-width: 600px; margin: 0 auto; display: flex; gap: 10px; }
+  .btn-prev {
+    flex: 0 0 80px;
+    background: #f5efe8;
+    color: #6b3a2a;
+    border: 2px solid #e8ddd0;
+    border-radius: 50px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-prev:hover { background: #ede3d8; }
+  .btn-next {
+    flex: 1;
+    background: linear-gradient(135deg, #6b3a2a, #9b5a3a);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(107,58,42,0.3);
+  }
+  .btn-next:hover { box-shadow: 0 6px 20px rgba(107,58,42,0.4); }
+  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+  /* === 结果页 === */
+  #page-result { display: none; }
+  .result-header {
+    background: linear-gradient(135deg, #6b3a2a 0%, #9b5a3a 50%, #c8854a 100%);
+    color: #fff;
+    padding: 40px 20px 32px;
+    text-align: center;
+  }
+  .result-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 12px;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+  .result-header h2 { font-size: clamp(20px, 5vw, 28px); font-weight: 800; margin-bottom: 6px; }
+  .result-type-badge {
+    display: inline-block;
+    background: #ffd580;
+    color: #3a2a1a;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: 20px;
+    margin-top: 8px;
+  }
+
+  .result-body { max-width: 600px; margin: 0 auto; padding: 20px 16px 40px; }
+
+  .score-chart {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(107,58,42,0.08);
+    border: 1px solid #ede3d8;
+  }
+  .score-chart h3 { font-size: 14px; font-weight: 700; color: #6b3a2a; margin-bottom: 14px; }
+  .bar-item { margin-bottom: 10px; }
+  .bar-label-row { display: flex; justify-content: space-between; font-size: 12px; color: #5a4a3a; margin-bottom: 4px; }
+  .bar-label-row .score-val { font-weight: 700; color: #9b5a3a; }
+  .bar-track { background: #f0e8e0; border-radius: 6px; height: 10px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; transition: width 0.8s ease; }
+
+  .result-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(107,58,42,0.08);
+    border: 1px solid #ede3d8;
+  }
+  .result-card.primary-card { border: 2px solid #9b5a3a; }
+  .result-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f0e8e0;
+  }
+  .result-icon { font-size: 36px; }
+  .result-card-title { flex: 1; }
+  .result-card-title .type-name { font-size: 18px; font-weight: 800; color: #3a2a1a; }
+  .result-card-title .type-label {
+    display: inline-block;
+    background: #fdf0e6;
+    color: #9b5a3a;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-top: 4px;
+  }
+  .result-card-title .type-label.primary { background: #9b5a3a; color: #fff; }
+
+  .feature-box { margin-bottom: 12px; }
+  .feature-box .ftitle { font-size: 13px; font-weight: 700; color: #6b3a2a; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .feature-box .ftext { font-size: 13px; color: #5a4a3a; line-height: 1.75; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .tag { background: #fdf0e6; color: #9b5a3a; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .tag.danger { background: #fde8e8; color: #c04040; }
+
+  .mixed-card {
+    background: linear-gradient(135deg, #fff8f0, #fff);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 2px dashed #c8854a;
+  }
+  .mixed-card h3 { font-size: 14px; font-weight: 700; color: #6b3a2a; margin-bottom: 12px; }
+  .mixed-combo {
+    background: #fdf0e6;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-left: 3px solid #9b5a3a;
+  }
+  .mixed-combo .combo-name { font-size: 14px; font-weight: 700; color: #3a2a1a; margin-bottom: 4px; }
+  .mixed-combo .combo-desc { font-size: 13px; color: #5a4a3a; }
+
+  .follow-card {
+    background: linear-gradient(135deg, #6b3a2a, #9b5a3a);
+    border-radius: 18px;
+    padding: 24px 20px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .follow-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 10px; line-height: 1.6; }
+  .follow-card p { font-size: 13px; opacity: 0.88; line-height: 1.7; margin-bottom: 16px; }
+  .btn-restart {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    color: #fff;
+    border-radius: 50px;
+    padding: 12px 32px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-restart:hover { background: rgba(255,255,255,0.3); }
+
+  /* 共用 */
+  .hidden { display: none !important; }
+  @media (max-width: 420px) {
+    .options-group { grid-template-columns: 1fr; }
+    .score-legend { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== 首页 ========== -->
+<div id="page-home">
+  <div class="hero">
+    <div class="hero-badge">中华中医药学会标准优化版</div>
+    <h1>九种体质自测</h1>
+    <h2>体质不对，进补白费</h2>
+    <div class="hero-desc">
+      <p>测一测你是<strong>单一体质</strong>，还是<strong>混合体质</strong>？</p>
+      <p>中医认为，人分九种体质。</p>
+      <p>同样的食疗、同样的养生，别人有效，你无效，<br>往往是因为：<strong>体质不匹配</strong>。</p>
+      <p>本测试根据中华中医药学会《九种体质判定标准》优化，分为<strong>男生版、女生版</strong>，帮你快速认清体质，找到适合自己的食疗方案。</p>
+    </div>
+  </div>
+
+  <div class="gender-section">
+    <p class="gender-title">请先选择你的性别</p>
+    <div class="gender-cards">
+      <div class="gender-card" id="card-male" onclick="selectGender('male')">
+        <div class="icon">👨</div>
+        <div class="label">男生版</div>
+        <div class="sub">针对男性体质设计</div>
+      </div>
+      <div class="gender-card" id="card-female" onclick="selectGender('female')">
+        <div class="icon">👩</div>
+        <div class="label">女生版</div>
+        <div class="sub">针对女性体质设计</div>
+      </div>
+    </div>
+
+    <div class="notice-box">
+      <h3>📋 测试说明</h3>
+      <ul>
+        <li>共 18 道选择题，根据真实情况选择</li>
+        <li>系统自动计算分数，判断单一体质或混合体质</li>
+        <li>测试结果仅为养生参考，不替代医疗诊断</li>
+      </ul>
+      <div class="score-legend">
+        <div class="score-item"><strong>A</strong> 完全没有（1分）</div>
+        <div class="score-item"><strong>B</strong> 偶尔有（2分）</div>
+        <div class="score-item"><strong>C</strong> 经常有（3分）</div>
+        <div class="score-item"><strong>D</strong> 总是如此（4分）</div>
+      </div>
+    </div>
+
+    <button class="btn-start" id="btn-start" onclick="startQuiz()" disabled>
+      选择性别后开始测试 →
+    </button>
+  </div>
+</div>
+
+<!-- ========== 测试页 ========== -->
+<div id="page-quiz">
+  <div class="quiz-header">
+    <div class="quiz-header-inner">
+      <span class="quiz-header-title" id="quiz-title">九种体质自测</span>
+      <span class="quiz-counter" id="quiz-counter">1 / 18</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-bar"></div>
+    </div>
+  </div>
+
+  <div class="quiz-body" id="quiz-body"></div>
+
+  <div class="quiz-footer">
+    <div class="quiz-footer-inner">
+      <button class="btn-prev" id="btn-prev" onclick="prevQuestion()">← 上一题</button>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">下一题 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 结果页 ========== -->
+<div id="page-result">
+  <div class="result-header">
+    <div class="result-badge" id="result-gender-label">测试结果</div>
+    <h2 id="result-title">你的体质分析</h2>
+    <div id="result-type-badge" class="result-type-badge"></div>
+  </div>
+  <div class="result-body" id="result-body"></div>
+</div>
+
+<script>
+// ===== 体质信息 =====
+const constitutions = {
+  pinghe: {
+    name: '平和质',
+    icon: '🌿',
+    color: '#4caf50',
+    feature: '气色好、精力充沛、睡眠好、身体无明显不适，是最理想的体质状态。',
+    food: ['保持规律作息，饮食清淡，少熬夜，少辛辣，正常养护即可，不用刻意大补。'],
+    recommend: [],
+    avoid: []
+  },
+  qixu: {
+    name: '气虚质',
+    icon: '💨',
+    color: '#8bc34a',
+    feature: '易累、说话无力、易出汗、易感冒，免疫力差，生病后恢复很慢。',
+    foodDirection: '补气健脾',
+    recommend: ['山药', '小米', '黄芪', '党参', '大枣', '鸡肉'],
+    avoid: ['生冷', '寒凉', '过度劳累', '熬夜']
+  },
+  yangxu: {
+    name: '阳虚质',
+    icon: '🧊',
+    color: '#2196f3',
+    feature: '怕冷、手脚凉、腰膝酸软，男性可见尿频，女性可见宫寒、痛经。',
+    foodDirection: '温阳散寒',
+    recommend: ['生姜', '羊肉', '桂圆', '韭菜', '核桃'],
+    avoid: ['冰饮', '生冷水果', '凉茶', '熬夜']
+  },
+  yinxu: {
+    name: '阴虚质',
+    icon: '🔥',
+    color: '#ff7043',
+    feature: '怕热、口干咽燥、失眠多梦、夜间盗汗、皮肤干，女性月经量少。',
+    foodDirection: '滋阴润燥',
+    recommend: ['银耳', '百合', '莲子', '梨', '麦冬', '沙参'],
+    avoid: ['辛辣', '烧烤', '酒', '熬夜', '浓茶']
+  },
+  tanshi: {
+    name: '痰湿质',
+    icon: '💧',
+    color: '#607d8b',
+    feature: '体型肥胖、身体困重、出油多、痰多、胸闷、口黏腻，易水肿。',
+    foodDirection: '祛湿化痰',
+    recommend: ['薏米', '赤小豆', '冬瓜', '白萝卜', '荷叶'],
+    avoid: ['甜腻', '油炸', '奶茶', '啤酒', '宵夜']
+  },
+  shire: {
+    name: '湿热质',
+    icon: '🌶️',
+    color: '#ff9800',
+    feature: '易长痘、口苦口臭、大便黏、心烦急躁，女性可见白带黄稠。',
+    foodDirection: '清热利湿',
+    recommend: ['绿豆', '芹菜', '苦瓜', '莲藕', '蒲公英'],
+    avoid: ['酒', '辣', '烧烤', '火锅', '甜腻', '熬夜']
+  },
+  xueyu: {
+    name: '血瘀质',
+    icon: '🌹',
+    color: '#9c27b0',
+    feature: '面色暗沉、身体固定部位疼痛、易瘀青、口唇发紫，女性痛经有血块。',
+    foodDirection: '活血化瘀',
+    recommend: ['玫瑰花', '山楂', '桃仁', '黑木耳', '当归'],
+    avoid: ['生冷', '久坐不动', '受凉', '情绪压抑']
+  },
+  qiyu: {
+    name: '气郁质',
+    icon: '😮‍💨',
+    color: '#795548',
+    feature: '情绪低落、爱叹气、胸闷、焦虑失眠，女性经前烦躁乳房胀痛。',
+    foodDirection: '疏肝理气',
+    recommend: ['陈皮', '佛手', '玫瑰花', '薄荷', '黄花菜'],
+    avoid: ['生闷气', '熬夜', '高强度压力']
+  },
+  tebing: {
+    name: '特禀质',
+    icon: '🤧',
+    color: '#e91e63',
+    feature: '过敏体质：易鼻炎、皮肤痒、荨麻疹，换季、吹风、遇粉尘就不适。',
+    foodDirection: '固表抗过敏',
+    recommend: ['黄芪', '防风', '大枣', '山药', '银耳'],
+    avoid: ['海鲜', '辛辣', '花粉', '冷风刺激']
+  }
+};
+
+// 体质顺序（对应题目）
+const constitutionOrder = ['pinghe','qixu','yangxu','yinxu','tanshi','shire','xueyu','qiyu','tebing'];
+
+// 常见混合体质说明
+const mixedCombos = {
+  'qixu+yangxu': { name: '气虚 + 阳虚', desc: '怕冷又易累 → 温阳 + 补气一起做' },
+  'yangxu+qixu': { name: '气虚 + 阳虚', desc: '怕冷又易累 → 温阳 + 补气一起做' },
+  'tanshi+shire': { name: '痰湿 + 湿热', desc: '又油又上火 → 清湿热 + 健脾祛湿' },
+  'shire+tanshi': { name: '痰湿 + 湿热', desc: '又油又上火 → 清湿热 + 健脾祛湿' },
+  'qiyu+xueyu': { name: '气郁 + 血瘀', desc: '情绪差 + 痛经/疼痛 → 疏肝 + 活血' },
+  'xueyu+qiyu': { name: '气郁 + 血瘀', desc: '情绪差 + 痛经/疼痛 → 疏肝 + 活血' },
+  'yinxu+qixu': { name: '阴虚 + 气虚', desc: '又干又累 → 气阴双补' },
+  'qixu+yinxu': { name: '阴虚 + 气虚', desc: '又干又累 → 气阴双补' }
+};
+
+// ===== 题目数据 =====
+const maleQuestions = [
+  // 平和质 题1
+  {
+    id: 1, constitution: 'pinghe', group: '平和质',
+    text: '你平时精力充沛，睡眠好，吃饭香，身体无明显不适？'
+  },
+  // 气虚质 题2-3
+  {
+    id: 2, constitution: 'qixu', group: '气虚质',
+    text: '容易疲劳、气短、说话无力，稍微一动就出汗？'
+  },
+  {
+    id: 3, constitution: 'qixu', group: '气虚质',
+    text: '容易感冒，免疫力差，生病后恢复很慢？'
+  },
+  // 阳虚质 题4-5
+  {
+    id: 4, constitution: 'yangxu', group: '阳虚质',
+    text: '怕冷、手脚常年冰凉，比别人更怕冷？'
+  },
+  {
+    id: 5, constitution: 'yangxu', group: '阳虚质',
+    text: '腰膝酸软、尿频清长、夜尿次数多？'
+  },
+  // 阴虚质 题6-7
+  {
+    id: 6, constitution: 'yinxu', group: '阴虚质',
+    text: '怕热、手心脚心发热、口干咽燥？'
+  },
+  {
+    id: 7, constitution: 'yinxu', group: '阴虚质',
+    text: '失眠多梦、夜间盗汗、大便干燥？'
+  },
+  // 痰湿质 题8-9
+  {
+    id: 8, constitution: 'tanshi', group: '痰湿质',
+    text: '身体沉重、困倦乏力、腹部松软肥胖？'
+  },
+  {
+    id: 9, constitution: 'tanshi', group: '痰湿质',
+    text: '脸上出油多、痰多、胸闷、口黏腻？'
+  },
+  // 湿热质 题10-11
+  {
+    id: 10, constitution: 'shire', group: '湿热质',
+    text: '容易长痘、口苦口臭、大便黏马桶？'
+  },
+  {
+    id: 11, constitution: 'shire', group: '湿热质',
+    text: '心烦急躁、小便黄、爱喝冷饮？'
+  },
+  // 血瘀质 题12-13
+  {
+    id: 12, constitution: 'xueyu', group: '血瘀质',
+    text: '身体常有固定部位疼痛、容易瘀青？'
+  },
+  {
+    id: 13, constitution: 'xueyu', group: '血瘀质',
+    text: '脸色暗沉、口唇发紫、健忘？'
+  },
+  // 气郁质 题14-15
+  {
+    id: 14, constitution: 'qiyu', group: '气郁质',
+    text: '情绪低落、爱叹气、胸闷、压力大？'
+  },
+  {
+    id: 15, constitution: 'qiyu', group: '气郁质',
+    text: '失眠、焦虑、多疑、食欲时好时坏？'
+  },
+  // 特禀质 题16-17
+  {
+    id: 16, constitution: 'tebing', group: '特禀质',
+    text: '容易过敏、打喷嚏、皮肤瘙痒、荨麻疹？'
+  },
+  {
+    id: 17, constitution: 'tebing', group: '特禀质',
+    text: '换季、吹风、遇粉尘就不舒服？'
+  },
+  // 脾胃参考 题18
+  {
+    id: 18, constitution: null, group: '脾胃参考',
+    text: '胃胀、消化不良、大便不成形或稀溏？'
+  }
+];
+
+const femaleQuestions = [
+  // 平和质 题1
+  {
+    id: 1, constitution: 'pinghe', group: '平和质',
+    text: '气色好、睡眠好、月经规律、身体舒适？'
+  },
+  // 气虚质 题2-3
+  {
+    id: 2, constitution: 'qixu', group: '气虚质',
+    text: '容易疲劳、懒言、面色苍白或萎黄？'
+  },
+  {
+    id: 3, constitution: 'qixu', group: '气虚质',
+    text: '月经量多、色淡、容易头晕乏力？'
+  },
+  // 阳虚质 题4-5
+  {
+    id: 4, constitution: 'yangxu', group: '阳虚质',
+    text: '怕冷、手脚冰凉、经期更明显、喜热饮？'
+  },
+  {
+    id: 5, constitution: 'yangxu', group: '阳虚质',
+    text: '痛经、小腹冷痛、暖和后会减轻？'
+  },
+  // 阴虚质 题6-7
+  {
+    id: 6, constitution: 'yinxu', group: '阴虚质',
+    text: '怕热、口干、皮肤干、易长细纹？'
+  },
+  {
+    id: 7, constitution: 'yinxu', group: '阴虚质',
+    text: '失眠、多梦、盗汗、月经量少、经期潮热？'
+  },
+  // 痰湿质 题8-9
+  {
+    id: 8, constitution: 'tanshi', group: '痰湿质',
+    text: '身体浮肿、困倦、脸油头油、腹部肥胖？'
+  },
+  {
+    id: 9, constitution: 'tanshi', group: '痰湿质',
+    text: '白带偏多、胸闷、口黏、大便黏？'
+  },
+  // 湿热质 题10-11
+  {
+    id: 10, constitution: 'shire', group: '湿热质',
+    text: '易长痘、口苦、白带黄稠、有异味？'
+  },
+  {
+    id: 11, constitution: 'shire', group: '湿热质',
+    text: '心烦、大便干或黏、小便黄？'
+  },
+  // 血瘀质 题12-13
+  {
+    id: 12, constitution: 'xueyu', group: '血瘀质',
+    text: '痛经有血块、颜色暗黑、经期腹痛明显？'
+  },
+  {
+    id: 13, constitution: 'xueyu', group: '血瘀质',
+    text: '脸色暗、长斑、口唇紫暗、身体刺痛？'
+  },
+  // 气郁质 题14-15
+  {
+    id: 14, constitution: 'qiyu', group: '气郁质',
+    text: '情绪敏感、郁闷、爱叹气、乳房胀痛？'
+  },
+  {
+    id: 15, constitution: 'qiyu', group: '气郁质',
+    text: '失眠、焦虑、经期前烦躁明显？'
+  },
+  // 特禀质 题16-17
+  {
+    id: 16, constitution: 'tebing', group: '特禀质',
+    text: '过敏体质：鼻炎、皮肤敏感、换季不适？'
+  },
+  {
+    id: 17, constitution: 'tebing', group: '特禀质',
+    text: '遇风、遇冷、遇花粉就打喷嚏、皮肤痒？'
+  },
+  // 脾胃参考 题18
+  {
+    id: 18, constitution: null, group: '脾胃参考',
+    text: '胃胀、食欲差、大便时干时稀、容易拉肚子？'
+  }
+];
+
+const options = [
+  { label: 'A', text: '完全没有', score: 1 },
+  { label: 'B', text: '偶尔有', score: 2 },
+  { label: 'C', text: '经常有', score: 3 },
+  { label: 'D', text: '总是如此', score: 4 }
+];
+
+// ===== 状态 =====
+let selectedGender = '';
+let currentQuestions = [];
+let answers = new Array(18).fill(null);
+let currentQ = 0;
+
+// ===== 首页逻辑 =====
+function selectGender(gender) {
+  selectedGender = gender;
+  document.getElementById('card-male').classList.toggle('selected', gender === 'male');
+  document.getElementById('card-female').classList.toggle('selected', gender === 'female');
+  const btn = document.getElementById('btn-start');
+  btn.disabled = false;
+  btn.textContent = (gender === 'male' ? '开始男生版测试 →' : '开始女生版测试 →');
+}
+
+function startQuiz() {
+  currentQuestions = selectedGender === 'male' ? maleQuestions : femaleQuestions;
+  answers = new Array(18).fill(null);
+  currentQ = 0;
+  document.getElementById('quiz-title').textContent = selectedGender === 'male' ? '男生版 · 九种体质自测' : '女生版 · 九种体质自测';
+  document.getElementById('page-home').style.display = 'none';
+  document.getElementById('page-quiz').style.display = 'block';
+  renderQuestion();
+}
+
+// ===== 测试逻辑 =====
+function renderQuestion() {
+  const q = currentQuestions[currentQ];
+  const total = currentQuestions.length;
+  document.getElementById('quiz-counter').textContent = `${currentQ + 1} / ${total}`;
+  document.getElementById('progress-bar').style.width = `${((currentQ + 1) / total) * 100}%`;
+
+  const body = document.getElementById('quiz-body');
+  body.innerHTML = '';
+
+  // 分组标签
+  const labelEl = document.createElement('div');
+  labelEl.className = 'quiz-section-label';
+  labelEl.textContent = q.group;
+  body.appendChild(labelEl);
+
+  // 问题卡片
+  const card = document.createElement('div');
+  card.className = 'question-card';
+  card.innerHTML = `
+    <span class="question-num">第 ${currentQ + 1} 题</span>
+    <span class="question-tag">${q.group}</span>
+    <div class="question-text">${q.text}</div>
+    <div class="options-group" id="options-group"></div>
+  `;
+  body.appendChild(card);
+
+  const optGroup = card.querySelector('#options-group');
+  options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn' + (answers[currentQ] === idx ? ' selected' : '');
+    btn.innerHTML = `<span class="option-letter">${opt.label}</span>${opt.text}（${opt.score}分）`;
+    btn.onclick = () => selectOption(idx);
+    optGroup.appendChild(btn);
+  });
+
+  document.getElementById('btn-prev').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  updateNextBtn();
+  window.scrollTo(0, 0);
+}
+
+function selectOption(idx) {
+  answers[currentQ] = idx;
+  document.querySelectorAll('.option-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === idx);
+  });
+  updateNextBtn();
+}
+
+function updateNextBtn() {
+  const btn = document.getElementById('btn-next');
+  const isLast = currentQ === currentQuestions.length - 1;
+  if (answers[currentQ] !== null) {
+    btn.disabled = false;
+    btn.textContent = isLast ? '提交测试 ✓' : '下一题 →';
+  } else {
+    btn.disabled = true;
+    btn.textContent = isLast ? '请作答后提交' : '请选择后继续';
+  }
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < currentQuestions.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+// ===== 计分与结果 =====
+function showResult() {
+  // 计算各体质得分
+  const scores = {};
+  constitutionOrder.forEach(k => scores[k] = 0);
+  let spiGut = 0;
+
+  currentQuestions.forEach((q, idx) => {
+    const ans = answers[idx];
+    if (ans === null) return;
+    const score = options[ans].score;
+    if (q.constitution) {
+      scores[q.constitution] += score;
+    } else {
+      spiGut = score;
+    }
+  });
+
+  // 平和质需特殊处理（1题，满分4，其他体质最高8分）
+  // 标准化：平和质得分 * 2，使其与双题体质可比
+  const normalScores = {};
+  constitutionOrder.forEach(k => {
+    normalScores[k] = k === 'pinghe' ? scores[k] * 2 : scores[k];
+  });
+
+  // 排序
+  const sorted = constitutionOrder
+    .map(k => ({ key: k, raw: scores[k], norm: normalScores[k] }))
+    .sort((a, b) => b.norm - a.norm);
+
+  const primary = sorted[0];
+  const secondary = sorted[1];
+
+  // 判断混合体质：次高分 >= 主高分的 70%
+  const isMixed = secondary.norm > 0 && (secondary.norm / primary.norm) >= 0.70;
+
+  // 判断平和质优先逻辑：如果平和质是最高分且分数较高，优先显示
+  // 如果所有体质分数都很低，判为平和质
+  const allLow = sorted.every(s => s.norm <= 4);
+  const finalPrimary = allLow ? { key: 'pinghe', raw: 0, norm: 0 } : primary;
+
+  // 渲染结果页
+  document.getElementById('page-quiz').style.display = 'none';
+  document.getElementById('page-result').style.display = 'block';
+
+  const gLabel = selectedGender === 'male' ? '男生版测试结果' : '女生版测试结果';
+  document.getElementById('result-gender-label').textContent = gLabel;
+  document.getElementById('result-title').textContent = `你的主要体质：${constitutions[finalPrimary.key].name}`;
+  document.getElementById('result-type-badge').textContent = isMixed && !allLow
+    ? `混合体质（${constitutions[finalPrimary.key].name} + ${constitutions[secondary.key].name}）`
+    : '单一主要体质';
+
+  const body = document.getElementById('result-body');
+  body.innerHTML = '';
+
+  // 得分图表
+  const chartHtml = `
+    <div class="score-chart">
+      <h3>📊 各体质得分分析</h3>
+      ${sorted.map((s, i) => {
+        const c = constitutions[s.key];
+        const pct = Math.round((s.norm / 8) * 100);
+        return `
+          <div class="bar-item">
+            <div class="bar-label-row">
+              <span>${c.icon} ${c.name}${i === 0 && !allLow ? ' ⭐' : ''}</span>
+              <span class="score-val">${s.raw}分 (${pct}%)</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${pct}%;background:${c.color}"></div>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>`;
+  body.insertAdjacentHTML('beforeend', chartHtml);
+
+  // 主要体质详情
+  renderConstitutionCard(body, finalPrimary.key, true);
+
+  // 混合体质详情
+  if (isMixed && !allLow) {
+    renderConstitutionCard(body, secondary.key, false);
+
+    // 混合体质通用说明
+    const comboKey = finalPrimary.key + '+' + secondary.key;
+    const comboInfo = mixedCombos[comboKey];
+    const mixedHtml = `
+      <div class="mixed-card">
+        <h3>🔀 混合体质养生要点</h3>
+        <p style="font-size:13px;color:#5a4a3a;margin-bottom:12px;">
+          你属于 <strong>混合体质</strong>，需要同时兼顾两种体质的调理，不能只针对单一方向，体质不对，进补白费。
+        </p>
+        ${comboInfo ? `
+          <div class="mixed-combo">
+            <div class="combo-name">${comboInfo.name}</div>
+            <div class="combo-desc">${comboInfo.desc}</div>
+          </div>` : ''}
+        <p style="font-size:12px;color:#8a7060;margin-top:10px;">混合体质更要精准食疗，不可盲目跟风。</p>
+      </div>`;
+    body.insertAdjacentHTML('beforeend', mixedHtml);
+  }
+
+  // 脾胃参考
+  if (spiGut >= 3) {
+    body.insertAdjacentHTML('beforeend', `
+      <div class="result-card" style="border-left:4px solid #795548;">
+        <div class="result-card-header">
+          <div class="result-icon">🍵</div>
+          <div class="result-card-title">
+            <div class="type-name">脾胃偏弱</div>
+            <div class="type-label">参考提示</div>
+          </div>
+        </div>
+        <div class="feature-box">
+          <div class="ftitle">💡 养胃建议</div>
+          <div class="ftext">你有一定的脾胃不适症状，建议在日常饮食中注意：少吃生冷、不暴饮暴食、细嚼慢咽，可适当食用山药、小米粥、莲子等健脾食材。</div>
+        </div>
+      </div>`);
+  }
+
+  // 引流底部
+  body.insertAdjacentHTML('beforeend', `
+    <div class="follow-card">
+      <h3>想知道你的体质适合吃什么、不适合吃什么？</h3>
+      <p>关注我，带你用家常食材，做对食疗，养对体质。</p>
+      <button class="btn-restart" onclick="restartQuiz()">重新测试</button>
+    </div>`);
+
+  window.scrollTo(0, 0);
+}
+
+function renderConstitutionCard(container, key, isPrimary) {
+  const c = constitutions[key];
+  let html = `
+    <div class="result-card ${isPrimary ? 'primary-card' : ''}">
+      <div class="result-card-header">
+        <div class="result-icon">${c.icon}</div>
+        <div class="result-card-title">
+          <div class="type-name">${c.name}</div>
+          <div class="type-label ${isPrimary ? 'primary' : ''}">${isPrimary ? '主要体质' : '次要体质'}</div>
+        </div>
+      </div>
+      <div class="feature-box">
+        <div class="ftitle">🔍 体质特点</div>
+        <div class="ftext">${c.feature}</div>
+      </div>`;
+
+  if (c.foodDirection) {
+    html += `
+      <div class="feature-box">
+        <div class="ftitle">🥗 食疗方向：${c.foodDirection}</div>
+        <div class="tag-row">${c.recommend.map(r => `<span class="tag">${r}</span>`).join('')}</div>
+      </div>
+      <div class="feature-box">
+        <div class="ftitle">⚠️ 少吃少做</div>
+        <div class="tag-row">${c.avoid.map(a => `<span class="tag danger">${a}</span>`).join('')}</div>
+      </div>`;
+  } else if (c.food) {
+    html += `
+      <div class="feature-box">
+        <div class="ftitle">💚 养生建议</div>
+        <div class="ftext">${c.food.join('<br>')}</div>
+      </div>`;
+  }
+
+  html += '</div>';
+  container.insertAdjacentHTML('beforeend', html);
+}
+
+function restartQuiz() {
+  answers = new Array(18).fill(null);
+  currentQ = 0;
+  selectedGender = '';
+  document.getElementById('card-male').classList.remove('selected');
+  document.getElementById('card-female').classList.remove('selected');
+  document.getElementById('btn-start').disabled = true;
+  document.getElementById('btn-start').textContent = '选择性别后开始测试 →';
+  document.getElementById('page-result').style.display = 'none';
+  document.getElementById('page-home').style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
